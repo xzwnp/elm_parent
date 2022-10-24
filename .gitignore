@@ -1,0 +1,9 @@
+# Project exclude paths
+/common/common-util/target/
+/common/service-conf/target/
+/gateway/target/
+/service/service-business/target/
+/service/service-message/target/
+/service/service-order/target/
+/service/service-oss/target/
+/service/service-user/target/

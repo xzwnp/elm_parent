@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.order.mapper.OrderMapper">
+    <resultMap id="OrderBoMap" type="com.example.order.entity.bo.OrderBo">
+        <result property="id" column="id"/>
+        <result property="businessId" column="businessId"/>
+        <result property="businessName" column="businessName"/>
+        <result property="status" column="status"/>
+        <result property="totalPrice" column="totalPrice"/>
+        <result property="userId" column="userId"/>
+        <result property="createTime" column="create_time"/>
+        <collection property="orderFoodList" ofType="com.example.order.entity.OrderFood">
+            <result property="orderId" column="orderId"/>
+            <result property="foodId" column="foodId"/>
+            <result property="foodName" column="foodName"/>
+            <result property="foodPrice" column="foodPrice"/>
+            <result property="foodCount" column="foodCount"/>
+        </collection>
+    </resultMap>
+    <!-- 查询全部订单信息 -->
+    <select id="getFullOrderInfoList" resultMap="OrderBoMap">
+        select id,businessId,businessName,status,totalPrice,userId,create_time,
+        foodId,foodName,foodPrice,foodCount
+        from orders o
+        join order_food as f on o.id=f.orderId
+        where userId = #{userId}
+        <if test="status!=-1">
+            and status = #{status}
+        </if>
+        order by create_time desc
+    </select>
+    <!-- 根据订单号查询订单信息 -->
+    <select id="getFullOrderInfoByOrderId" resultMap="OrderBoMap">
+        select id,
+               businessId,
+               businessName,
+               status,
+               totalPrice,
+               userId,
+               create_time,
+               foodId,
+               foodName,
+               foodPrice,
+               foodCount
+        from orders o
+                 join order_food as f on o.id = f.orderId
+        where id = #{orderId}
+    </select>
+
+</mapper>
