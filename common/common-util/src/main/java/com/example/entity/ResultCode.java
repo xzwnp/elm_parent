@@ -1,5 +1,7 @@
 package com.example.entity;
 
+import org.omg.CORBA.NO_PERMISSION;
+
 /**
  * com.atguigu.commonutils
  *
@@ -13,7 +15,11 @@ public enum ResultCode {
 //    Integer ERROR = 20001;
 //    //支付中
 //    Integer PAYING = 25000;
-    SUCCESS(20000), ERROR(20001), INPUT_ERROR(25000);
+    SUCCESS(20000), ERROR(20001), INPUT_ERROR(20002),
+    TOKEN_ERROR(20003),
+    NO_PERMISSION(20004),
+    PATH_NOT_EXIST(20005),
+    ;
     private Integer code;
 
     private ResultCode(Integer code) {

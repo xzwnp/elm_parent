@@ -3,6 +3,7 @@ package com.example.entity;
 import com.example.entity.ResultCode;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,8 +21,8 @@ import java.util.Map;
  */
 @Data
 @ApiModel("统一返回结果")
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class R<T> {
     @ApiModelProperty("状态码")
     private int code;// 状态码
@@ -57,6 +58,15 @@ public class R<T> {
         responseData.setData(data);
         return responseData;
     }
+
+    public static R<ChainedHashMap> success() {
+        // 创建响应标准格式对象
+        R<ChainedHashMap> r = new R<>();
+        // 调用转换器方法，将（成功）枚举常量解析，放入到标准响应数据中。
+        r.parserEnum(ResultCode.SUCCESS);
+        return r;
+    }
+
 
 
     /**
@@ -101,6 +111,12 @@ public class R<T> {
         return responseData;
     }
 
-
+    public static class ChainedHashMap extends HashMap<String, Object> {
+        @Override
+        public ChainedHashMap put(String key, Object value) {
+            super.put(key, value);
+            return this;
+        }
+    }
 }
 

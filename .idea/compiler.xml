@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="service-conf" />
         <module name="common-util" />
+        <module name="service-msm" />
         <module name="service-user" />
         <module name="service-oss" />
         <module name="service-business" />
@@ -32,6 +33,7 @@
       <module name="service-business" options="-parameters" />
       <module name="service-conf" options="-parameters" />
       <module name="service-message" options="-parameters" />
+      <module name="service-msm" options="-parameters" />
       <module name="service-order" options="-parameters" />
       <module name="service-oss" options="-parameters" />
       <module name="service-user" options="-parameters" />

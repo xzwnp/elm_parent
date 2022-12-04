@@ -1,92 +1,75 @@
 package com.example.user.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.entity.GlobalException;
-import com.example.entity.ResultCode;
-import com.example.entity.UserInputException;
+import com.example.user.entity.Role;
 import com.example.user.entity.User;
 import com.example.user.mapper.UserMapper;
+import com.example.user.service.PermissionService;
+import com.example.user.service.RoleService;
 import com.example.user.service.UserService;
-import com.example.util.JwtUtils;
-import com.example.util.RandomUtil;
-import lombok.extern.slf4j.Slf4j;
+import com.example.util.JwtEntity;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
-import org.springframework.util.DigestUtils;
-
-import java.nio.charset.StandardCharsets;
-import java.util.UUID;
-
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
- * <p>
- * 会员表 服务实现类
- * </p>
+ * com.example.shirojwtdemo.service.impl
  *
- * @author atguigu
- * @since 2022-03-15
+ * @author xiaozhiwei
+ * 2022/11/28
+ * 15:20
  */
 @Service
-@Slf4j
-public class UserServiceImpl
-        extends ServiceImpl<UserMapper, User>
-        implements UserService {
+public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService, IService<User> {
+    protected RoleService roleService;
+    protected PermissionService permissionService;
 
     @Autowired
-    RedisTemplate<String, Object> redisTemplate;
-
-    @Override
-    public String login(User user) {
-        String username = user.getPhone();
-        String password = user.getPassword();
-
-        //校验参数
-        if (StringUtils.isEmpty(password) ||
-                StringUtils.isEmpty(username)) {
-            throw new UserInputException(ResultCode.INPUT_ERROR, "请检查输入!");
-        }
-
-        //获取会员
-        User result = baseMapper.selectOne(new QueryWrapper<User>().eq("phone", username));
-        if (null == result) {
-            throw new UserInputException(ResultCode.INPUT_ERROR, "用户不存在!");
-        }
-
-
-        //校验密码
-        System.out.println(DigestUtils.md5DigestAsHex(user.getPassword().getBytes(StandardCharsets.UTF_8)));
-        if (!DigestUtils.md5DigestAsHex(user.getPassword().getBytes()).equals(result.getPassword())) {
-            throw new UserInputException(ResultCode.INPUT_ERROR, "密码错误!");
-        }
-
-        //使用JWT生成token字符串
-        String token = JwtUtils.getJwtToken(result.getId(), result.getPhone());
-        return token;
+    public UserServiceImpl(RoleService roleService, PermissionService permissionService) {
+        this.roleService = roleService;
+        this.permissionService = permissionService;
     }
 
     @Override
-    public String login(String phone, String code) {
-        String c = (String) redisTemplate.opsForValue().get("VerificationCode::" + phone);
-        if (c == null || !c.equals(code)) {
-            throw new UserInputException("验证码不正确!");
-        }
-        User result = baseMapper.selectOne(new QueryWrapper<User>().eq("phone", phone));
-//        创建用户
-        if (result == null) {
-            String id = RandomUtil.randomUUID();
-            result = new User(id, phone, "饿了么用户", null);
-            baseMapper.insert(result);
-
-        }
-        //使用JWT生成token字符串
-        String token = JwtUtils.getJwtToken(result.getId(), result.getPhone());
-        return token;
+    public User findUserByUsername(String account) {
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(User::getUsername, account);
+        return baseMapper.selectOne(wrapper);
     }
 
+    @Override
+    public String login(String username, String password) {
+        //1.用户名密码检验
+        //username和password如果为空,controller背锅
+        User user = findUserByUsername(username);
+        if (user == null) {
+            throw new UnknownAccountException("用户不存在!");
+        }
+        String hashedPassword = new SimpleHash("md5", password, "salt", 3).toString();
+        if (!hashedPassword.equals(user.getPassword())) {
+            throw new IncorrectCredentialsException("密码错误!");
+        }
+        //2.登录成功,查用户权限,生成token
+        JwtEntity jwtEntity = new JwtEntity();
+        jwtEntity.setUserId(String.valueOf(user.getId()));
+        jwtEntity.setUserName(user.getUsername());
+        //2.1 查角色
+        List<Role> roles = roleService.findRoleByUserId(user.getId());
+        List<Integer> roleIdList = roles.stream().map(Role::getId).collect(Collectors.toList());
+        List<String> roleStringList = roles.stream().map(Role::getRole).collect(Collectors.toList());
+        jwtEntity.setRoles(roleStringList);
+        //2.2 查权限
+        List<String> permissionList = permissionService.findPermissionsByRoleIds(roleIdList);
+        //todo 查询用户对应的权限
+        jwtEntity.setPermissions(permissionList);
 
+        return com.example.demo.util.JwtUtil.createJwtToken(jwtEntity);
+    }
 }

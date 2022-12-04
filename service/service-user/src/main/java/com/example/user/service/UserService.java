@@ -4,15 +4,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.user.entity.User;
 
 /**
- * <p>
- * 会员表 服务类
- * </p>
- *
- * @author atguigu
- * @since 2022-03-15
+ * @author xzwnp
+ * @description 针对表【user】的数据库操作Service
+ * @createDate 2022-11-08 19:41:14
  */
 public interface UserService extends IService<User> {
-    String login(User admin);
+    User findUserByUsername(String account);
 
-    String login(String phone,String code);
+    String login(String username, String password);
+
 }

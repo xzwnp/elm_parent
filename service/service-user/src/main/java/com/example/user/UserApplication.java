@@ -15,11 +15,11 @@ import org.springframework.context.annotation.ComponentScan;
  * Steps：
  */
 @ComponentScan({"com.example"})
-@SpringBootApplication//取消数据源自动配置
+@SpringBootApplication
 @MapperScan("com.example.user.mapper")
 @EnableDiscoveryClient
 public class UserApplication {
-	public static void main(String[] args) {
-		SpringApplication.run(UserApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(UserApplication.class, args);
+    }
 }

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.user.mapper.PermissionMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.user.entity.Permission">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="permission" column="permission" jdbcType="VARCHAR"/>
+        <result property="desc" column="desc" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="findbyRoleIds" resultType="string" parameterType="list">
+        select p.permission
+        from permission p,role_permission rp
+        where p.id = rp.permission_id
+        and rp.id in
+        <foreach collection="roleIds" item="rid" open="(" close=")" separator=",">
+            #{rid}
+        </foreach>
+    </select>
+    
+</mapper>

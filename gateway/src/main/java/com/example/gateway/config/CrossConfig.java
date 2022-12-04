@@ -12,6 +12,7 @@ import org.springframework.web.util.pattern.PathPatternParser;
  * 不需要了,写配置文件里面了
  */
 //@Configuration
+@Deprecated
 public class CrossConfig {
     private CorsConfiguration buildConfig() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();

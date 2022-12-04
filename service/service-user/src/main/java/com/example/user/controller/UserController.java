@@ -2,11 +2,11 @@ package com.example.user.controller;
 
 
 import com.example.entity.R;
-import com.example.entity.UserInputException;
 import com.example.user.entity.User;
 import com.example.user.entity.UserCodeQuery;
 import com.example.user.service.UserService;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authc.AuthenticationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -24,27 +24,29 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/user/login")
 public class UserController {
     @Autowired
-    private UserService memberService;
+    private UserService userService;
 
     @ApiOperation(value = "用户登录")
     @PostMapping("/byPassword")
     public R<String> login(@RequestBody User user) {
-        String token = memberService.login(user);
+        String token = userService.login(user.getUsername(), user.getPassword());
         return R.success(token);
     }
 
     @ApiOperation(value = "使用验证码登录")
     @PostMapping("/byCode")
     public R<String> login(@RequestBody UserCodeQuery user) {
-        if (!StringUtils.hasLength(user.getPhone())){
-            throw new UserInputException("手机号格式不正确!");
+        if (!StringUtils.hasLength(user.getPhone())) {
+            throw new AuthenticationException("手机号格式不正确!");
         }
-        if (!StringUtils.hasLength(user.getCode())){
-            throw new UserInputException("未输入验证码!");
+        if (!StringUtils.hasLength(user.getCode())) {
+            throw new AuthenticationException("未输入验证码!");
         }
-        String token = memberService.login(user.getPhone(),user.getCode());
+        String token = userService.login(user.getPhone(), user.getCode());
         return R.success(token);
     }
+
+
 
 
 }

@@ -28,7 +28,7 @@
         <java.version>1.8</java.version>
         <guli.version>0.0.1-SNAPSHOT</guli.version>
         <mybatis-plus.version>3.5.1</mybatis-plus.version>
-        <swagger.version>2.7.0</swagger.version>
+        <swagger.version>3.0.0</swagger.version>
         <jwt.version>0.7.0</jwt.version>
         <!--        <fastjson.version>1.2.28</fastjson.version>-->
         <!--        <gson.version>2.8.2</gson.version>-->
@@ -42,6 +42,7 @@
         <dysmsapi.version>2.0.9</dysmsapi.version>
         <aliyun-java-sdk-core.version>4.3.3</aliyun-java-sdk-core.version>
         <aliyun-sdk-oss.version>3.1.0</aliyun-sdk-oss.version>
+        <shiro.version>1.10.0</shiro.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -74,18 +75,7 @@
                 <version>${mybatis-plus.version}</version>
             </dependency>
 
-            <!--swagger-->
-            <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger2</artifactId>
-                <version>${swagger.version}</version>
-            </dependency>
-            <!--swagger ui-->
-            <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger-ui</artifactId>
-                <version>${swagger.version}</version>
-            </dependency>
+
             <!--日期时间工具-->
             <dependency>
                 <groupId>joda-time</groupId>
@@ -114,7 +104,17 @@
                 <artifactId>aliyun-sdk-oss</artifactId>
                 <version>${aliyun-sdk-oss.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-spring-boot-web-starter</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+            <!--swagger-->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-boot-starter</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -124,6 +124,8 @@
             <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
+
+
     <build>
         <plugins>
             <!--            <plugin>-->
@@ -136,10 +138,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>3.8.1</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                    <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
         </plugins>
