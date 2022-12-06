@@ -64,7 +64,7 @@ public class Business implements Serializable {
     @TableField("discounts")
     private String discounts;
 
-    @TableField("sell_count")
+    @TableField("sellCount")
     private Integer sellCount;
 
     @ApiModelProperty("热门评论")
@@ -72,7 +72,7 @@ public class Business implements Serializable {
     private String hotComment;
 
     @ApiModelProperty("红包")
-    @TableField("red_packet")
+    @TableField("redPacket")
     private String redPacket;
 
 

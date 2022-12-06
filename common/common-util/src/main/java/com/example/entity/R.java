@@ -1,6 +1,7 @@
 package com.example.entity;
 
 import com.example.entity.ResultCode;
+import com.example.page.PageData;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
@@ -59,6 +60,8 @@ public class R<T> {
         return responseData;
     }
 
+
+
     public static R<ChainedHashMap> success() {
         // 创建响应标准格式对象
         R<ChainedHashMap> r = new R<>();
@@ -66,7 +69,6 @@ public class R<T> {
         r.parserEnum(ResultCode.SUCCESS);
         return r;
     }
-
 
 
     /**
@@ -82,6 +84,14 @@ public class R<T> {
         responseData.parserEnum(enumCode);
         responseData.setData(data);
 
+        return responseData;
+    }
+
+    public static <T> R<T> error() {
+        // 创建响应标准格式对象
+        R<T> responseData = new R<T>();
+        // 调用转换器方法，将（错误）枚举常量解析。
+        responseData.parserEnum(ResultCode.ERROR);
         return responseData;
     }
 
