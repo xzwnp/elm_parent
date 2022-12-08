@@ -19,15 +19,12 @@
         <module name="service-message" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="service-admin" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="common" options="" />
       <module name="common-util" options="-parameters" />
-      <module name="elm_parent" options="-parameters" />
+      <module name="elm_parent" options="" />
       <module name="gateway" options="-parameters" />
       <module name="service" options="" />
       <module name="service-admin" options="-parameters" />

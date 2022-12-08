@@ -1,9 +1,9 @@
-package com.example.user.service.impl;
+package com.example.admin.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.user.entity.Role;
-import com.example.user.mapper.RoleMapper;
-import com.example.user.service.RoleService;
+import com.example.admin.entity.Role;
+import com.example.admin.mapper.RoleMapper;
+import com.example.admin.service.RoleService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,14 +1,16 @@
 server:
   port: 8002
-  name: service-business
+  servlet:
+    context-path: /business
 spring:
+
   application:
     name: service-business
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://8.134.162.31:3306/elm?serverTimezone=GMT%2B8
-    username: root
-    password: x.z.w.91
+    username: elm
+    password: elm
     # redis相关配置
   redis:
     host: 101.43.171.193

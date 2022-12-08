@@ -1,7 +1,7 @@
-package com.example.user.service;
+package com.example.admin.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.example.user.entity.Permission;
+import com.example.admin.entity.Permission;
 
 import java.util.List;
 
@@ -12,5 +12,4 @@ import java.util.List;
  */
 public interface PermissionService extends IService<Permission> {
     List<String> findPermissionsByRoleIds(List<Integer> roleIds);
-
 }

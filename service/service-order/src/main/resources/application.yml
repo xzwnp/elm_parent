@@ -1,17 +1,19 @@
 server:
   port: 8004
+  servlet:
+    context-path: /order
 spring:
   application:
     name: service-order
   cloud:
     nacos:
       discovery:
-        server-addr: 127.0.0.1:8848
+        server-addr: 8.134.162.31:8848
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    password: x.z.w.91
-    url: jdbc:mysql://localhost:3306/elm?serverTimezone=GMT%2B8
-    username: root
+    url: jdbc:mysql://8.134.162.31:3306/elm?serverTimezone=GMT%2B8
+    username: elm
+    password: elm
     # redis相关配置
   redis:
     host: 101.43.171.193
@@ -26,6 +28,9 @@ spring:
         #最大阻塞等待时间(负数表示没限制)
         max-idle: 5
         min-idle: 0
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

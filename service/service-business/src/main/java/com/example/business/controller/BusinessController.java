@@ -10,6 +10,8 @@ import com.example.business.service.FoodService;
 import com.example.entity.InnerApi;
 import com.example.entity.MapBuilder;
 import com.example.entity.R;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -27,8 +29,9 @@ import java.util.Map;
  * @since 2022-05-23
  */
 @RestController
-@RequestMapping("/business")
+@RequestMapping("/")
 @CacheConfig(cacheNames = "business")
+@Api(tags = "用户端能看到的商家,食物信息")
 public class BusinessController {
 
     @Autowired
@@ -40,6 +43,7 @@ public class BusinessController {
     @GetMapping("current/{current}/size/{size}")
 //    简易分页缓存
     @Cacheable(key = "#p2 + '-'+ #p0 + '-'+ #p1")
+    @ApiOperation(value = "分页查询")
     public List<Business> getBusinessInfo(@PathVariable int current, @PathVariable int size, @RequestParam(required = false) String type) {
         QueryWrapper<Business> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(type != null, "type", type);
@@ -51,6 +55,7 @@ public class BusinessController {
 
     @GetMapping("{id}")
     @Cacheable(key = "#id")
+    @ApiOperation("获取商家详情,对应的所有食物信息")
     public R<Map<String, Object>> getBusinessById(@PathVariable String id) {
         Business business = businessService.getById(id);
         List<Food> foods = foodService.getFoodListByBusinessId(id);
@@ -69,6 +74,7 @@ public class BusinessController {
      * @return
      */
     @GetMapping("recommend/current/{current}/size/{size}")
+    @ApiOperation("todo 获取用户的个性推荐")
     public R getRecommendBusinessInfo(@PathVariable int current, @PathVariable int size, @RequestParam String type) {
         return null;
     }

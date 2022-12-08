@@ -35,15 +35,14 @@ public class ShiroConfig {
 
         filterRuleMap.put("/static/*", "anon");
         filterRuleMap.put("/error", "anon");
-        filterRuleMap.put("/user/register", "anon");
-        filterRuleMap.put("/user/login/**", "anon");
+        filterRuleMap.put("/admin/register", "anon");
+        filterRuleMap.put("/admin/login/**", "anon");
         //↑配置不参与验证的映射路径。
 
 
         // 关键：配置jwt验证过滤器。原来的authc全部改成这个
         //↓ 此处即为shiro1.8新增的默认过滤器：authcBearer-BearerHttpAuthenticationFilter。jwt验证的很多操作都由该filter自动完成，以致我们只需理解其机制而无需亲手实现。
-//        filterRuleMap.put("/**/admin/**", "authcBearer");
-
+        filterRuleMap.put("/**/admin/**", "authcBearer");
         filterRuleMap.put("/**", "anon");
 
 

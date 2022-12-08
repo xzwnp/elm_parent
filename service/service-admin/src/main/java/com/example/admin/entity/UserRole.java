@@ -1,4 +1,4 @@
-package com.example.user.entity;
+package com.example.admin.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -9,11 +9,11 @@ import java.io.Serializable;
 
 /**
  * 
- * @TableName permission
+ * @TableName user_role
  */
-@TableName(value ="permission")
+@TableName(value ="user_role")
 @Data
-public class Permission implements Serializable {
+public class UserRole implements Serializable {
     /**
      * 
      */
@@ -23,12 +23,12 @@ public class Permission implements Serializable {
     /**
      * 
      */
-    private String permission;
+    private Integer userId;
 
     /**
      * 
      */
-    private String desc;
+    private Integer roleId;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
@@ -44,10 +44,10 @@ public class Permission implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        Permission other = (Permission) that;
+        UserRole other = (UserRole) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getPermission() == null ? other.getPermission() == null : this.getPermission().equals(other.getPermission()))
-            && (this.getDesc() == null ? other.getDesc() == null : this.getDesc().equals(other.getDesc()));
+            && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
+            && (this.getRoleId() == null ? other.getRoleId() == null : this.getRoleId().equals(other.getRoleId()));
     }
 
     @Override
@@ -55,8 +55,8 @@ public class Permission implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getPermission() == null) ? 0 : getPermission().hashCode());
-        result = prime * result + ((getDesc() == null) ? 0 : getDesc().hashCode());
+        result = prime * result + ((getUserId() == null) ? 0 : getUserId().hashCode());
+        result = prime * result + ((getRoleId() == null) ? 0 : getRoleId().hashCode());
         return result;
     }
 
@@ -67,8 +67,8 @@ public class Permission implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", permission=").append(permission);
-        sb.append(", desc=").append(desc);
+        sb.append(", userId=").append(userId);
+        sb.append(", roleId=").append(roleId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

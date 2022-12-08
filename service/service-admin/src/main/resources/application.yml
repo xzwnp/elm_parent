@@ -1,0 +1,22 @@
+server:
+  port: 8001
+  servlet:
+    context-path: /admin
+spring:
+  application:
+    name: service-admin
+  datasource:
+    url: jdbc:mysql://8.134.162.31:3306/elm_user?useSSL=false
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: elm
+    password: elm
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 8.134.162.31:8848
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

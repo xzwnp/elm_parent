@@ -14,7 +14,8 @@ import java.util.List;
 @Data
 public class JwtEntity {
     private Object userId;
-    private String userName;
+    private String username;
+    private String nickname;
     private List<String> roles;
     private List<String> permissions;
 

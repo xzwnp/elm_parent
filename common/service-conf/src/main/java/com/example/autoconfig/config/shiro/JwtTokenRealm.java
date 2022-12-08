@@ -1,7 +1,7 @@
 package com.example.autoconfig.config.shiro;
 
-import com.example.demo.util.JwtUtil;
 import com.example.util.JwtEntity;
+import com.example.util.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -45,9 +45,9 @@ public class JwtTokenRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
 
         JwtEntity user = (JwtEntity) SecurityUtils.getSubject().getPrincipal();
-        log.info("权限验证,用户:{}", user.getUserName());
-        log.info("用户具有如下角色:{}", user.getPermissions());
-        log.info("用户具有如下权限:{}", user.getPermissions());
+        log.info("权限验证,用户:{}", user.getUsername());
+        log.debug("用户具有如下角色:{}", user.getPermissions());
+        log.debug("用户具有如下权限:{}", user.getPermissions());
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         simpleAuthorizationInfo.addRoles(user.getRoles());
 
@@ -64,7 +64,7 @@ public class JwtTokenRealm extends AuthorizingRealm {
      */
     @Override
     public AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-        log.info("获取token信息");
+        log.debug("获取token信息");
         BearerToken bearerToken = (BearerToken) authenticationToken;
         String bearerTokenString = bearerToken.getToken();
         //检查token是否有效

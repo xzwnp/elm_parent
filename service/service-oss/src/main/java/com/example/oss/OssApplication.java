@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScans;
 
@@ -18,8 +19,9 @@ import org.springframework.context.annotation.ComponentScans;
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 @ComponentScan(basePackages = {"com.example"})
 @EnableDiscoveryClient
+@RefreshScope
 public class OssApplication {
     public static void main(String[] args) {
-        SpringApplication.run(OssApplication.class,args);
+        SpringApplication.run(OssApplication.class, args);
     }
 }

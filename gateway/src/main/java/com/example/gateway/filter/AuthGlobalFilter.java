@@ -1,7 +1,11 @@
 package com.example.gateway.filter;
 
-import com.google.gson.JsonObject;
+import com.example.entity.R;
+import com.example.entity.ResultCode;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -27,11 +31,14 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
 
     private AntPathMatcher antPathMatcher = new AntPathMatcher();
 
+    @Autowired
+    ObjectMapper objectMapper;
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
         String path = request.getURI().getPath();
-        log.info("请求资源路径:{}",path);
+        log.info("请求资源路径:{}", path);
         //内部服务接口，不允许外部访问
         if (antPathMatcher.match("/**/inner/**", path)) {
             ServerHttpResponse response = exchange.getResponse();
@@ -46,11 +53,14 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
     }
 
     private Mono<Void> out(ServerHttpResponse response) {
-        JsonObject message = new JsonObject();
-        message.addProperty("success", false);
-        message.addProperty("code", 28004);
-        message.addProperty("data", "鉴权失败");
-        byte[] bits = message.toString().getBytes(StandardCharsets.UTF_8);
+        String message;
+        try {
+            //自定义鉴权失败信息
+            message = objectMapper.writeValueAsString(R.error(ResultCode.NO_PERMISSION, "鉴权失败!"));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        byte[] bits = message.getBytes(StandardCharsets.UTF_8);
         DataBuffer buffer = response.bufferFactory().wrap(bits);
         //response.setStatusCode(HttpStatus.UNAUTHORIZED);
         //指定编码，否则在浏览器中会中文乱码

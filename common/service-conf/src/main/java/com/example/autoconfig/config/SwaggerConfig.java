@@ -1,4 +1,4 @@
-package com.example.common.config;
+package com.example.autoconfig.config;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -49,11 +49,11 @@ public class SwaggerConfig {
         // 用ApiInfoBuilder进行定制
         return new ApiInfoBuilder()
                 // 设置标题
-                .title("标题：物业管理系统_接口文档")
+                .title("饱了么_接口文档")
                 // 描述
-                .description("描述：用于小区门禁出入管理,具体包括XXX,XXX模块...")
+                .description("点击右上角的Select a definition,即可查看不同模块的接口描述")
                 // 作者信息
-                .contact(new Contact("xiaozhiwei", "yidongzhenka.top", "xiaozhiwei@mail.ynu.edu.com"))
+                .contact(new Contact("XiaoZhiwei", "https://yidongzhenka.top", "xiao@ynu.icu"))
                 // 版本
                 .version("版本号:" + "1.0")
                 .build();
@@ -90,6 +90,7 @@ public class SwaggerConfig {
                 try {
                     Field field = ReflectionUtils.findField(bean.getClass(), "handlerMappings");
                     field.setAccessible(true);
+
                     return (List<RequestMappingInfoHandlerMapping>) field.get(bean);
                 } catch (IllegalArgumentException | IllegalAccessException e) {
                     throw new IllegalStateException(e);

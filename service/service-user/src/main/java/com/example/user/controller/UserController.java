@@ -5,6 +5,7 @@ import com.example.entity.R;
 import com.example.user.entity.User;
 import com.example.user.entity.UserCodeQuery;
 import com.example.user.service.UserService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authc.AuthenticationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,8 @@ import org.springframework.web.bind.annotation.*;
  * @since 2022-03-15
  */
 @RestController
-@RequestMapping("/user/login")
+@RequestMapping("/login")
+@Api(tags = "用户登录,注册")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -33,6 +35,8 @@ public class UserController {
         return R.success(token);
     }
 
+
+    //todo 需要调用短信模块,我实在懒得写了
     @ApiOperation(value = "使用验证码登录")
     @PostMapping("/byCode")
     public R<String> login(@RequestBody UserCodeQuery user) {
@@ -45,8 +49,6 @@ public class UserController {
         String token = userService.login(user.getPhone(), user.getCode());
         return R.success(token);
     }
-
-
 
 
 }

@@ -1,4 +1,4 @@
-package com.example.demo.util;
+package com.example.util;
 
 /**
  * com.example.commonutils
@@ -57,7 +57,7 @@ public class JwtUtil {
                 .signWith(SignatureAlgorithm.HS256, APP_SECRET)
                 .compact();
 
-        return JwtToken;
+        return TOKEN_PREFIX + JwtToken;
     }
 
     /**
@@ -73,7 +73,7 @@ public class JwtUtil {
         try {
             Jwts.parser().setSigningKey(APP_SECRET).parseClaimsJws(jwtToken);
         } catch (Exception e) {
-            log.info("token不存在,错误信息:{}",e.getMessage());
+            log.info("token不存在,错误信息:{}", e.getMessage());
             return false;
         }
         return true;

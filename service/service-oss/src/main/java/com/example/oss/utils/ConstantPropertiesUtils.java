@@ -1,5 +1,6 @@
 package com.example.oss.utils;
 
+import lombok.Data;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -15,18 +16,14 @@ import org.springframework.stereotype.Component;
  * 实现InitializingBean方法,当组件的几个成员变量被赋值后,会执行afterPropertiesSet()
  */
 @Component
-//@ConfigurationProperties(prefix = "aliyun.oss.file")
+@ConfigurationProperties(prefix = "aliyun.oss.file")
 public class ConstantPropertiesUtils implements InitializingBean {
-    @Value("${aliyun.oss.file.endpoint}")
-	private String endpoint;
+    private String endpoint;
 
-	@Value("${aliyun.oss.file.keyid}")
-	private String keyid;
+    private String keyid;
 
-	@Value("${aliyun.oss.file.keysecret}")
-	private String keysecret;
-	@Value("${aliyun.oss.file.bucketname}")
-	private String bucketname;
+    private String keysecret;
+    private String bucketname;
     public static String END_POINT;
     public static String ACCESS_KEY_ID;
     public static String ACCESS_KEY_SECRET;
@@ -34,10 +31,26 @@ public class ConstantPropertiesUtils implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
+        System.out.println(endpoint+"\n"+bucketname);
         END_POINT = endpoint;
         ACCESS_KEY_ID = keyid;
         ACCESS_KEY_SECRET = keysecret;
         BUCKET_NAME = bucketname;
     }
 
+    public void setEndpoint(String endpoint) {
+        this.endpoint = endpoint;
+    }
+
+    public void setKeyid(String keyid) {
+        this.keyid = keyid;
+    }
+
+    public void setKeysecret(String keysecret) {
+        this.keysecret = keysecret;
+    }
+
+    public void setBucketname(String bucketname) {
+        this.bucketname = bucketname;
+    }
 }

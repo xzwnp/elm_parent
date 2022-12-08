@@ -2,6 +2,7 @@ package com.example.business.controller;
 
 
 import com.alibaba.nacos.client.utils.ValidatorUtils;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.business.entity.Business;
 import com.example.business.entity.dto.BusinessDTO;
@@ -9,28 +10,33 @@ import com.example.business.service.BusinessService;
 import com.example.constant.Constant;
 import com.example.constant.PageQuery;
 import com.example.entity.R;
+import com.example.entity.ResultCode;
 import com.example.page.PageData;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
 
 /**
- * @author Mark sunlightcs@gmail.com
+ * @author XiaoZhiwei xiao@ynu.icu
  * @since 1.0.0 2022-12-06
  */
 @RestController
-@RequestMapping("business/admin")
-@Api(tags = "")
+@RequestMapping("admin")
+@Api(tags = "商家管理")
+@Slf4j
 public class BusinessAdminController {
     @Autowired
     private BusinessService businessService;
@@ -39,8 +45,16 @@ public class BusinessAdminController {
     @ApiOperation("分页")
 //    @RequiresPermissions("business:page")
     public R<PageData<Business>> page(@ApiIgnore @RequestBody PageQuery params) {
+        LambdaQueryWrapper<Business> wrapper = new LambdaQueryWrapper<>();
+        if (StringUtils.hasLength(params.getInput())) {
+            wrapper.eq(Business::getBusinessId, params.getInput())
+                    .or()
+                    .like(Business::getBusinessName, params.getInput())
+                    .or()
+                    .like(Business::getBusinessAddress, params.getInput());
+        }
         Page<Business> businessPage = new Page<>(params.getPage(), params.getPageSize());
-        businessService.page(businessPage);
+        businessService.page(businessPage, wrapper);
 
         return R.success(new PageData<>(businessPage.getRecords(), businessPage.getTotal()));
     }
@@ -56,7 +70,6 @@ public class BusinessAdminController {
     @ApiOperation("保存")
     @RequiresPermissions("business:save")
     public R save(@RequestBody Business business) {
-
         if (businessService.save(business)) {
             return R.success();
         } else {
@@ -82,10 +95,9 @@ public class BusinessAdminController {
     @ApiOperation("删除")
     @RequiresPermissions("business:delete")
     public R delete(@RequestBody List<Long> ids) {
+        log.info("待删除:{}", ids);
 
-        businessService.removeBatchByIds(ids);
-
-        return R.success();
+        return businessService.removeBatchByIds(ids) ? R.success() : R.error(ResultCode.ERROR, "删除失败!");
     }
 
 
