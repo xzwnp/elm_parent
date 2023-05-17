@@ -12,7 +12,6 @@ import com.example.page.PageData;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -39,10 +38,10 @@ public class AdminUserController {
     @RequiresRoles("super_admin")
     public R<PageData<User>> page(@ApiIgnore @RequestBody PageQuery params) {
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        if (StringUtils.hasLength(params.getInput())) {
-            wrapper.eq(User::getId, params.getInput())
+        if (StringUtils.hasLength(params.getKeyword())) {
+            wrapper.eq(User::getId, params.getKeyword())
                     .or()
-                    .like(User::getUsername, params.getInput());
+                    .like(User::getUsername, params.getKeyword());
         }
         Page<User> userPage = new Page<>(params.getPage(), params.getPageSize());
         userService.page(userPage, wrapper);

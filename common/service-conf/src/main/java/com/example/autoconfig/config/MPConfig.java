@@ -19,7 +19,6 @@ import org.springframework.context.annotation.Configuration;
 import javax.sql.DataSource;
 
 @Configuration
-@ConditionalOnBean(DataSource.class)
 public class MPConfig {
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {

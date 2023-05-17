@@ -13,8 +13,10 @@ spring:
     password: elm
     # redis相关配置
   redis:
-    host: 101.43.171.193
-    port: 6379
+    #    host: beta.ynu.icu
+    #    port: 6379
+    cluster:
+      nodes: beta.ynu.icu:6371,beta.ynu.icu:6372,beta.ynu.icu:6373,beta.ynu.icu:6374,beta.ynu.icu:6375,beta.ynu.icu:6376
     password: asd123
     database: 0
     timeout: 1800000

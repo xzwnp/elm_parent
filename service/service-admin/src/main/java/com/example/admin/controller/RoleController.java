@@ -37,10 +37,10 @@ public class RoleController {
 //    @RequiresPermissions("role:page")
     public R<PageData<Role>> page(@ApiIgnore @RequestBody PageQuery params) {
         LambdaQueryWrapper<Role> wrapper = new LambdaQueryWrapper<>();
-        if (StringUtils.hasLength(params.getInput())) {
-            wrapper.eq(Role::getId, params.getInput())
+        if (StringUtils.hasLength(params.getKeyword())) {
+            wrapper.eq(Role::getId, params.getKeyword())
                     .or()
-                    .like(Role::getRole, params.getInput());
+                    .like(Role::getRole, params.getKeyword());
         }
         Page<Role> rolePage = new Page<>(params.getPage(), params.getPageSize());
         roleService.page(rolePage, wrapper);

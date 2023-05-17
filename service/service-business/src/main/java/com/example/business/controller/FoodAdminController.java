@@ -10,6 +10,7 @@ import com.example.entity.ResultCode;
 import com.example.page.PageData;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +28,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/food/admin")
 @Api(tags = "食物管理")
+@RequiresRoles("admin")
 public class FoodAdminController {
     @Autowired
     private FoodService foodService;
@@ -39,10 +41,10 @@ public class FoodAdminController {
         LambdaQueryWrapper<Food> wrapper = new LambdaQueryWrapper<>();
         Page<Food> foodPage = new Page<>(params.getPage(), params.getPageSize());
         wrapper.eq(Food::getBusinessId, params.getBusinessId());
-        if (StringUtils.hasLength(params.getInput())) {
-            wrapper.like(Food::getFoodName, params.getInput())
+        if (StringUtils.hasLength(params.getKeyword())) {
+            wrapper.like(Food::getFoodName, params.getKeyword())
                     .or()
-                    .like(Food::getFoodExplain, params.getInput());
+                    .like(Food::getFoodExplain, params.getKeyword());
         }
         foodService.page(foodPage, wrapper);
         return R.success(new PageData<>(foodPage.getRecords(), foodPage.getTotal()));

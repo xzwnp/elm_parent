@@ -1,5 +1,7 @@
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 /**
  * PACKAGE_NAME
  *
@@ -18,5 +20,12 @@ public class Test1 {
         a++;
         System.out.println("a = " + a);
         System.out.println("b = " + b);
+    }
+
+
+    public void add(List<String> input){
+        for(String i : input){
+            if(input)
+        }
     }
 }
