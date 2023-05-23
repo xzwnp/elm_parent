@@ -2,8 +2,8 @@ package com.example.user.controller;
 
 
 import com.example.entity.R;
-import com.example.user.entity.User;
 import com.example.user.entity.UserCodeQuery;
+import com.example.user.entity.form.PasswordLoginForm;
 import com.example.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,8 +30,8 @@ public class UserController {
 
     @ApiOperation(value = "用户登录")
     @PostMapping("/byPassword")
-    public R<String> login(@RequestBody User user) {
-        String token = userService.login(user.getUsername(), user.getPassword());
+    public R<String> login(@RequestBody PasswordLoginForm form) {
+        String token = userService.login(form.getPhone(), form.getPassword());
         return R.success(token);
     }
 

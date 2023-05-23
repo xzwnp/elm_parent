@@ -1,63 +1,84 @@
 package com.example.autoconfig.config.shiro;
 
-import org.apache.shiro.authz.Authorizer;
-import org.apache.shiro.authz.ModularRealmAuthorizer;
+import com.example.autoconfig.config.shiro.JwtTokenRealm;
+import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
+import org.apache.shiro.mgt.DefaultSubjectDAO;
+import org.apache.shiro.spring.LifecycleBeanPostProcessor;
+import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.apache.shiro.mgt.SecurityManager;
+import org.springframework.context.annotation.DependsOn;
 
-import java.util.Arrays;
+import javax.servlet.Filter;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * com.example.shirojwtdemo.config
- *
- * @author xiaozhiwei
- * 2022/11/28
- * 14:57
- */
 @Configuration
 public class ShiroConfig {
-    @Bean
-    public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
-        ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
-
+    @Bean("securityManager")
+    public DefaultWebSecurityManager getManager(JwtTokenRealm realm) {
+        DefaultWebSecurityManager manager = new DefaultWebSecurityManager();
+        // 使用自己的realm
+        manager.setRealm(realm);
         /*
-         * 配置filter,相应配置规则参考官网
-         * http://shiro.apache.org/web.html#urls-
-         * 默认过滤器对照表
-         * https://shiro.apache.org/web.html#default-filters
+         * 关闭shiro自带的session，详情见文档
+         * http://shiro.apache.org/session-management.html#SessionManagement-StatelessApplications%28Sessionless%29
          */
+        DefaultSubjectDAO subjectDAO = new DefaultSubjectDAO();
+        DefaultSessionStorageEvaluator defaultSessionStorageEvaluator = new DefaultSessionStorageEvaluator();
+        defaultSessionStorageEvaluator.setSessionStorageEnabled(false);
+        subjectDAO.setSessionStorageEvaluator(defaultSessionStorageEvaluator);
+        manager.setSubjectDAO(subjectDAO);
+        return manager;
+    }
 
-        Map<String, String> filterRuleMap = new HashMap<>();
-
-        filterRuleMap.put("/static/*", "anon");
-        filterRuleMap.put("/error", "anon");
-        filterRuleMap.put("/admin/register", "anon");
-        filterRuleMap.put("/admin/login/**", "anon");
-        //↑配置不参与验证的映射路径。
-
-
-        // 关键：配置jwt验证过滤器。原来的authc全部改成这个
-        //↓ 此处即为shiro1.8新增的默认过滤器：authcBearer-BearerHttpAuthenticationFilter。jwt验证的很多操作都由该filter自动完成，以致我们只需理解其机制而无需亲手实现。
-        filterRuleMap.put("/**/admin/**", "authcBearer");
-        filterRuleMap.put("/**", "anon");
-
-
-        //关键：全局配置NoSessionCreationFilter，把整个项目切换成无状态服务。
-        factoryBean.setGlobalFilters(Arrays.asList("noSessionCreation"));
-
+    @Bean("shiroFilterFactoryBean")
+    public ShiroFilterFactoryBean factory(DefaultWebSecurityManager securityManager) {
+        ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
+        // 添加自己的过滤器并且取名为jwt
+        Map<String, Filter> filterMap = new HashMap<>();
+        filterMap.put("jwt", new JWTFilter());
+        factoryBean.setFilters(filterMap);
         factoryBean.setSecurityManager(securityManager);
-        factoryBean.setFilterChainDefinitionMap(filterRuleMap);
+        /*
+         * 自定义url规则
+         * http://shiro.apache.org/web.html#urls-
+         */
+        Map<String, String> filterRuleMap = new HashMap<>();
+        // 在这里配置不需要进过filter的请求路径
 
+        // 其他所有请求不管是否需要登录,通过我们自己的JWT Filter,是否需要登录应该交给注解
+        filterRuleMap.put("/**", "jwt");
+        factoryBean.setFilterChainDefinitionMap(filterRuleMap);
         return factoryBean;
     }
 
+
+    /**
+     * 下面的代码是添加注解支持
+     */
     @Bean
-    protected Authorizer authorizer() {
-        return new ModularRealmAuthorizer();
+    @DependsOn("lifecycleBeanPostProcessor")
+    public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
+        DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
+        // 强制使用cglib，防止重复代理和可能引起代理出错的问题
+        // https://zhuanlan.zhihu.com/p/29161098
+        defaultAdvisorAutoProxyCreator.setProxyTargetClass(true);
+        return defaultAdvisorAutoProxyCreator;
     }
 
+    @Bean
+    public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
+        return new LifecycleBeanPostProcessor();
+    }
+
+    @Bean
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(DefaultWebSecurityManager securityManager) {
+        AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
+        advisor.setSecurityManager(securityManager);
+        return advisor;
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.util;
 
+import io.swagger.models.auth.In;
 import lombok.Data;
 
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
  */
 @Data
 public class JwtEntity {
-    private Object userId;
+    private Integer userId;
     private String username;
     private String nickname;
     private List<String> roles;

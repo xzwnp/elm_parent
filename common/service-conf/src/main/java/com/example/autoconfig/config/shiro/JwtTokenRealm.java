@@ -1,5 +1,6 @@
 package com.example.autoconfig.config.shiro;
 
+import com.example.entity.GlobalException;
 import com.example.util.JwtEntity;
 import com.example.util.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.support.RequestContext;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -60,27 +62,19 @@ public class JwtTokenRealm extends AuthorizingRealm {
 
     /**
      * 从token中解析出用户信息
-     * 不过能解析出用户信息
      */
     @Override
     public AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-        log.debug("获取token信息");
+        log.debug("尝试获取token信息");
         BearerToken bearerToken = (BearerToken) authenticationToken;
         String bearerTokenString = bearerToken.getToken();
         //检查token是否有效
         if (!JwtUtil.checkToken(bearerTokenString)) {
             throw new AuthenticationException("token无效或已过期!");
         }
-
         //解析出用户信息
         JwtEntity jwtEntity = JwtUtil.getUserInfo(bearerTokenString);
-        //设置用户id,方便controller直接获取
-        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        if (requestAttributes != null) {
-            //0表示范围为当前请求
-            requestAttributes.setAttribute("userId", jwtEntity.getUserId(), 0);
-        }
-
+        log.info("用户id:{}", jwtEntity.getUserId());
         //principal直接放对象,credential放token
         SimpleAuthenticationInfo res = new SimpleAuthenticationInfo(jwtEntity, bearerTokenString, this.getName());
         return res;
@@ -93,9 +87,8 @@ public class JwtTokenRealm extends AuthorizingRealm {
     }
 
     @Override
-    public Class getAuthenticationTokenClass() {
-        //设置由本realm处理的token类型。BearerToken是在filter里自动装配的。
-        return BearerToken.class;
+    public boolean supports(AuthenticationToken token) {
+        return token instanceof BearerToken;
     }
 
 

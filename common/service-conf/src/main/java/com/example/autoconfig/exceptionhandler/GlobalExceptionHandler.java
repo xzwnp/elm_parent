@@ -1,17 +1,12 @@
 package com.example.autoconfig.exceptionhandler;
 
 import com.example.entity.GlobalException;
-import com.example.entity.ResultCode;
-import com.example.entity.UserInputException;
+import com.example.constant.ResultCode;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authz.AuthorizationException;
-import org.apache.shiro.authz.UnauthenticatedException;
-import org.apache.shiro.authz.UnauthorizedException;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.entity.R;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
@@ -31,16 +26,25 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AuthenticationException.class)
     public R unauthorizedExceptionHandler(AuthenticationException e) {
         log.error("登录失败或token无效,错误信息:{}", e.getMessage());
-        return R.error(ResultCode.TOKEN_ERROR, e.getMessage());
+        return R.error(ResultCode.TOKEN_ERROR, "token过期或无效");
     }
 
     //权限验证错误
     @ExceptionHandler(AuthorizationException.class)
     public R unauthorizedExceptionHandler(AuthorizationException e) {
         log.error("{}", e.getMessage());
-        return R.error(ResultCode.NO_PERMISSION, e.getMessage());
+        return R.error(ResultCode.NO_PERMISSION, "没有相关权限!");
     }
 
+    @ExceptionHandler(MissingRequestHeaderException.class)
+    public R missingRequestHeaderExceptionHandler(MissingRequestHeaderException e) {
+        //token不存在的情况单独处理
+        if ("userId".equals(e.getHeaderName())) {
+            return R.error(ResultCode.TOKEN_ERROR, "token不存在!");
+        }
+        log.error("{}", e.getMessage());
+        return R.error(ResultCode.ERROR, e.getMessage());
+    }
 
     //对应路径不存在
     @ExceptionHandler(NoHandlerFoundException.class)

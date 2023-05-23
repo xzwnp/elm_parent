@@ -2,16 +2,16 @@ package com.example.order.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.order.entity.Order;
 import com.example.order.service.OrderService;
 import com.example.constant.PageQuery;
 import com.example.entity.R;
-import com.example.page.PageData;
+import com.example.autoconfig.util.PageData;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
@@ -26,6 +26,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin")
 @Api(tags = "订单管理")
+@RequiresRoles(value = {"admin", "super_admin"}, logical = Logical.OR)
 public class OrderAdminController {
     @Autowired
     private OrderService orderService;

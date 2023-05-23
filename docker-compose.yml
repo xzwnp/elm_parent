@@ -1,0 +1,67 @@
+# 目前最稳定版本：3.3，所以3.3就行。
+version: '3.3'
+services:
+  redis:
+    image: redis:5.0 #镜像及镜像版本
+    container_name: redis #容器名称,可选
+    hostname: redis #主机名
+    ports:
+      - "6379:6379" #暴露的端口号,方便调试
+    restart: always #宕机自动重启
+    command:
+      --requirepass "asd123" #redis最好加密,不然可能会被人用来挖矿
+  #系统管理服务
+  service-admin:
+    build: ./service/service-admin #Dockerfile所在目录,用来构建镜像
+    restart: on-failure #非正常退出时自动重启
+    depends_on:
+      - redis #依赖,可以不配置,默认会依赖整个compose文件所有service
+      - mysql
+    ports:
+      - "8001:8001" #指定需要暴露的端口号
+  service-business:
+    build: ./service/service-business
+    restart: on-failure #非正常退出时自动重启
+    depends_on:
+      - redis
+    ports:
+      - "8002:8002"
+  service-order:
+    build: ./service/service-order
+    restart: on-failure
+    depends_on:
+      - redis
+    ports:
+      - "8003:8003"
+  service-oss:
+    build: ./service/service-oss
+    restart: on-failure
+    depends_on:
+      - redis
+    ports:
+      - "8004:8004"
+  service-user:
+    build: ./service/service-user
+    restart: on-failure
+    depends_on:
+      - redis
+    ports:
+      - "8005:8005"
+  service-gateway:
+    build: ./gateway
+    restart: on-failure
+    depends_on:
+      - redis
+    ports:
+      - "9001:9001"
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/html:/usr/share/nginx/html #静态资源文件,一个项目一个子目录
+      - ./nginx/conf/nginx.conf:/etc/nginx/nginx.conf #配置文件
+    privileged: true # 这个必须要，解决nginx的文件调用的权限问题
+
+

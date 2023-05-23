@@ -13,8 +13,7 @@
     <select id="findRoleByUserId" resultType="com.example.admin.entity.Role">
         select role.*
         from role
-                 join user_role ur on ur.role_id = role.id
-                 join user on ur.user_id = user.id
-        where user.id = #{userId}
+                 join admin_role ar on ar.role_id = role.id
+        where ar.user_id = #{userId}
     </select>
 </mapper>
