@@ -14,7 +14,6 @@
         select role.*
         from role
                  join admin_role ar on ar.role_id = role.id
-                 join admin on ar.user_id = admin.id
-        where admin.id = #{userId}
+        where ar.user_id = #{userId}
     </select>
 </mapper>

@@ -1,4 +1,4 @@
-package com.example.entity;
+package com.example.constant;
 
 import org.omg.CORBA.NO_PERMISSION;
 
@@ -16,8 +16,8 @@ public enum ResultCode {
 //    //支付中
 //    Integer PAYING = 25000;
     SUCCESS(20000), ERROR(20001), INPUT_ERROR(20002),
-    TOKEN_ERROR(20003),
     PATH_NOT_EXIST(20005),
+    TOKEN_ERROR(28003),
     NO_PERMISSION(28004),
     ;
     private Integer code;

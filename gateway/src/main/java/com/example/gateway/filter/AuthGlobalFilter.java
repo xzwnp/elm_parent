@@ -1,7 +1,7 @@
 package com.example.gateway.filter;
 
 import com.example.entity.R;
-import com.example.entity.ResultCode;
+import com.example.constant.ResultCode;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,6 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 /**
  * <p>

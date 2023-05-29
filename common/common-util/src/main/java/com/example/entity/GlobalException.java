@@ -1,5 +1,6 @@
 package com.example.entity;
 
+import com.example.constant.ResultCode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

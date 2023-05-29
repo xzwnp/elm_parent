@@ -3,30 +3,10 @@ server:
   servlet:
     context-path: /business
 spring:
-
   application:
     name: service-business
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://8.134.162.31:3306/elm?serverTimezone=GMT%2B8
-    username: elm
-    password: elm
-    # redis相关配置
-  redis:
-    #    host: beta.ynu.icu
-    #    port: 6379
-    cluster:
-      nodes: beta.ynu.icu:6371,beta.ynu.icu:6372,beta.ynu.icu:6373,beta.ynu.icu:6374,beta.ynu.icu:6375,beta.ynu.icu:6376
-    password: asd123
-    database: 0
-    timeout: 1800000
-    lettuce:
-      pool:
-        max-active: 20
-        max-wait: -1
-        #最大阻塞等待时间(负数表示没限制)
-        max-idle: 5
-        min-idle: 0
+  profiles:
+    active: dev
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher

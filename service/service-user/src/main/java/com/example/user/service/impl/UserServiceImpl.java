@@ -13,6 +13,7 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,13 +44,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (user == null) {
             throw new UnknownAccountException("用户不存在!");
         }
+        if (!StringUtils.hasLength(user.getPassword())) {
+            throw new IncorrectCredentialsException("该用户未设置密码,请先使用验证码登录!");
+        }
         String hashedPassword = new SimpleHash("md5", password, "salt", 3).toString();
         if (!hashedPassword.equals(user.getPassword())) {
             throw new IncorrectCredentialsException("密码错误!");
         }
         //2.登录成功,生成token
         JwtEntity jwtEntity = new JwtEntity();
-        jwtEntity.setUserId(String.valueOf(user.getId()));
+        jwtEntity.setUserId(user.getId());
         jwtEntity.setUsername(user.getUsername());
         jwtEntity.setRoles(Arrays.asList("user"));
 

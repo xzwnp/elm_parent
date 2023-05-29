@@ -1,6 +1,6 @@
 package com.example.order.entity.query;
 
-import com.example.order.entity.vo.FoodVo;
+import com.example.order.entity.vo.FoodQuery;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -17,5 +17,5 @@ public class OrderQuery {
     private String businessName;
     private String businessId;
     private BigDecimal totalPrice;
-    private FoodVo[] foodList;
+    private FoodQuery[] foodList;
 }

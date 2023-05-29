@@ -1,5 +1,6 @@
 package com.example.autoconfig.config.shiro;
 
+import com.example.autoconfig.config.shiro.JwtTokenRealm;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
@@ -48,7 +49,7 @@ public class ShiroConfig {
          */
         Map<String, String> filterRuleMap = new HashMap<>();
         // 在这里配置不需要进过filter的请求路径
-        filterRuleMap.put("/user/login", "anon");
+
         // 其他所有请求不管是否需要登录,通过我们自己的JWT Filter,是否需要登录应该交给注解
         filterRuleMap.put("/**", "jwt");
         factoryBean.setFilterChainDefinitionMap(filterRuleMap);

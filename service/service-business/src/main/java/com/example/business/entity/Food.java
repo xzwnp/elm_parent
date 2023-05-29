@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author xiaozhiwei
@@ -40,7 +40,7 @@ public class Food implements Serializable {
     @TableField("foodExplain")
     private String foodExplain;
 
-    @ApiModelProperty("食品介绍")
+    @ApiModelProperty("食品价格")
     @TableField("foodPrice")
     private BigDecimal foodPrice;
 

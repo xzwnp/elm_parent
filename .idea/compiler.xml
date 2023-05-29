@@ -24,9 +24,9 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="common" options="-parameters" />
       <module name="common-util" options="-parameters" />
-      <module name="elm_parent" options="-parameters" />
+      <module name="elm_parent" options="" />
       <module name="gateway" options="-parameters" />
-      <module name="service" options="-parameters" />
+      <module name="service" options="" />
       <module name="service-admin" options="-parameters" />
       <module name="service-business" options="-parameters" />
       <module name="service-conf" options="-parameters" />

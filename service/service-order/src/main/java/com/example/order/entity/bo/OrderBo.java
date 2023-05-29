@@ -1,9 +1,6 @@
 package com.example.order.entity.bo;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.example.order.entity.OrderFood;
-import com.example.order.entity.vo.FoodVo;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 

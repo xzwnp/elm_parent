@@ -1,7 +1,7 @@
 package com.example.autoconfig.util;
 
+import com.example.constant.ResultCode;
 import com.example.entity.GlobalException;
-import com.example.entity.ResultCode;
 import com.example.util.JwtEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;

@@ -1,0 +1,1 @@
+import{_ as e,d as o,o as t,c as _}from"./index-45934075.js";const s=o({}),n={class:"box"};function c(a,d,r,p,u,i){return t(),_("div",n," 我是首页 ")}const l=e(s,[["render",c],["__scopeId","data-v-1ee963ae"]]);export{l as default};

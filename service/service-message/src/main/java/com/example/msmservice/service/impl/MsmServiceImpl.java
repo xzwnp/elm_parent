@@ -3,7 +3,7 @@ package com.example.msmservice.service.impl;
 import com.aliyun.dysmsapi20170525.Client;
 import com.aliyun.dysmsapi20170525.models.SendSmsRequest;
 import com.aliyun.dysmsapi20170525.models.SendSmsResponse;
-import com.example.entity.ResultCode;
+import com.example.constant.ResultCode;
 import com.example.msmservice.service.MsmService;
 import com.example.msmservice.util.MsmUtil;
 import com.example.entity.GlobalException;
@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
