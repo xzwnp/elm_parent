@@ -60,8 +60,8 @@ public class BusinessAdminController {
 
 	@PostMapping
 	@ApiOperation("保存")
-	@LogRecord(bizId = "#getBizId()", bizType = "商家信息",
-		content = "'新增了商家[' + #business.businessName + ']'")
+//	@LogRecord(bizId = "#getBizId()", bizType = "商家信息",
+//		content = "'新增了商家[' + #business.businessName + ']'")
 	public R save(@RequestBody Business business) {
 		if (businessService.save(business)) {
 			return R.success();
@@ -73,8 +73,8 @@ public class BusinessAdminController {
 
 	@PutMapping
 	@ApiOperation("修改")
-	@LogRecord(bizId = "#getBizId()", bizType = "商家信息",
-		content = "'更新了商家[' + #business.businessName + ']的信息'")
+//	@LogRecord(bizId = "#getBizId()", bizType = "商家信息",
+//		content = "'更新了商家[' + #business.businessName + ']的信息'")
 	public R update(@RequestBody Business business) {
 
 		if (businessService.updateById(business)) {
@@ -88,8 +88,8 @@ public class BusinessAdminController {
 	@DeleteMapping
 	@ApiOperation("删除")
 //	@RequiresPermissions("business:delete")
-	@LogRecord(bizId = "#getBizId()", bizType = "商家信息",
-		content = "'删除了商家[' + #business.businessName + ']'")
+//	@LogRecord(bizId = "#getBizId()", bizType = "商家信息",
+//		content = "'删除了商家[' + #business.businessName + ']'")
 	public R delete(@RequestBody List<Long> ids) {
 		log.info("待删除:{}", ids);
 

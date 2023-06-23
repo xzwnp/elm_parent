@@ -1,0 +1,30 @@
+server:
+  port: 8003
+  servlet:
+    context-path: /user
+spring:
+  profiles:
+    active: dev
+  application:
+    name: service-user
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 8.134.162.31:8848
+      config:
+        server-addr: 8.134.162.31:8848
+        namespace: elm
+        prefix: service-user
+        file-extension: yaml
+      # 数据库配置、Redis配置等迁移至Nacos配置中心
+  #    jackson日期转换
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:mapper/*.xml

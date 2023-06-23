@@ -53,8 +53,8 @@ public class FoodAdminController {
 
 	@PostMapping
 	@ApiOperation("保存")
-	@LogRecord(bizId = "#getBizId()", bizType = "菜品管理",
-		content = "'商家['+#getBusinessName(#food.businessId)+']新增了一款菜品[' + #food.foodName + ']'")
+//	@LogRecord(bizId = "#getBizId()", bizType = "菜品管理",
+//		content = "'商家['+#getBusinessName(#food.businessId)+']新增了一款菜品[' + #food.foodName + ']'")
 	public R save(@RequestBody Food food) {
 		if (foodService.save(food)) {
 			return R.success();
@@ -66,9 +66,9 @@ public class FoodAdminController {
 
 	@PutMapping
 	@ApiOperation("修改")
-	@LogRecord(bizId = "#getBizId()", bizType = "菜品管理", executeBefore = true,
-		content = "'商家['+#getBusinessName(#food.businessId)+']更新了菜品['" +
-			" + #food.foodName + ']的信息,具体如下:'+#getUpdatedFoodInfo(#food)")
+//	@LogRecord(bizId = "#getBizId()", bizType = "菜品管理", executeBefore = true,
+//		content = "'商家['+#getBusinessName(#food.businessId)+']更新了菜品['" +
+//			" + #food.foodName + ']的信息,具体如下:'+#getUpdatedFoodInfo(#food)")
 	public R update(@RequestBody Food food) {
 		if (foodService.updateById(food)) {
 			return R.success();
@@ -79,8 +79,8 @@ public class FoodAdminController {
 
 	@DeleteMapping
 	@ApiOperation("删除")
-	@LogRecord(bizId = "#getBizId()", bizType = "菜品管理",
-		content = "'商家删除菜品[' + #ids.toString() + ']'")
+//	@LogRecord(bizId = "#getBizId()", bizType = "菜品管理",
+//		content = "'商家删除菜品[' + #ids.toString() + ']'")
 	public R delete(@RequestBody List<Long> ids) {
 		return foodService.removeBatchByIds(ids) ? R.success() : R.error(ResultCode.ERROR, "删除失败!");
 	}

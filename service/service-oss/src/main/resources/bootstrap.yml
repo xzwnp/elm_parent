@@ -9,7 +9,7 @@ spring:
     nacos:
       config:
         server-addr: 8.134.162.31:8848
-        namespace: cbc5c328-a284-43f5-a145-71770650eb36
+        namespace: elm
         file-extension: properties
       discovery:
         server-addr: 8.134.162.31:8848
