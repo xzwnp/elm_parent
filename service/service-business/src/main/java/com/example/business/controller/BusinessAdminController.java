@@ -9,7 +9,7 @@ import com.example.constant.PageQuery;
 import com.example.entity.R;
 import com.example.constant.ResultCode;
 import com.example.autoconfig.util.PageData;
-import icu.ynu.log.annotation.LogRecord;
+//import icu.ynu.log.annotation.LogRecord;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;

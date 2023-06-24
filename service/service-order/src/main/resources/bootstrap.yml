@@ -5,6 +5,8 @@ server:
 spring:
   application:
     name: service-order
+  profiles:
+    active: dev
   cloud:
     nacos:
       discovery:
